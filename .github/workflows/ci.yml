@@ -9,4 +9,4 @@ jobs:
         with: { python-version: "3.11" }
       - run: pip install -r requirements.txt
       - run: python -c "import tldextract; tldextract.extract('http://example.com')"
-      - run: pytest -v
+      - run: python -m pytest -v
