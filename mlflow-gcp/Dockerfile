@@ -9,4 +9,4 @@ CMD exec mlflow server \
     --artifacts-destination $MLFLOW_ARTIFACTS_DESTINATION \
     --serve-artifacts \
     --allowed-hosts "*" \
-    --no-auth
+    --cors-allowed-origins "*"
