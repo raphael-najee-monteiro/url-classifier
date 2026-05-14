@@ -1,10 +1,13 @@
 """Train + log to MLflow + register if quality gate passes."""
 from __future__ import annotations
+import io
 from pathlib import Path
+import joblib
 import mlflow
 import mlflow.sklearn
 import pandas as pd
 import yaml
+from google.cloud import storage
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from sklearn.model_selection import train_test_split
 
@@ -45,11 +48,18 @@ def main() -> None:
         gate = params["quality_gate"]
         if metrics["accuracy"] >= gate["min_accuracy"] and metrics["f1"] >= gate["min_f1"]:
             mlflow.sklearn.log_model(
-                model, 
+                model,
                 artifact_path="model",
                 registered_model_name=params["mlflow"]["registered_model_name"],
             )
             print("Model registered.")
+
+            buf = io.BytesIO()
+            joblib.dump(model, buf)
+            buf.seek(0)
+            gcs = storage.Client()
+            gcs.bucket("pipeline-gang-dvc").blob("models/url_classifier.joblib").upload_from_file(buf)
+            print("Model uploaded to gs://pipeline-gang-dvc/models/url_classifier.joblib")
         else:
             print("Quality gate failed — not registered.")
 
