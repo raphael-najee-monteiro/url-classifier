@@ -92,14 +92,25 @@ def fetch_urls() -> None:
     seen = set(existing["url"].str.strip())
 
     # --- Fetch fresh data ---
+    frames = []
     print("Fetching PhishTank...")
-    phishing = _fetch_phishtank(fetch_cfg["phishtank_n"])
+    try:
+        frames.append(_fetch_phishtank(fetch_cfg["phishtank_n"]))
+    except Exception as e:
+        print(f"WARNING: PhishTank fetch failed ({e}), skipping.")
 
     print("Fetching Tranco...")
-    benign = _fetch_tranco(fetch_cfg["tranco_n"])
+    try:
+        frames.append(_fetch_tranco(fetch_cfg["tranco_n"]))
+    except Exception as e:
+        print(f"WARNING: Tranco fetch failed ({e}), skipping.")
+
+    if not frames:
+        print("No fresh data fetched. Training on existing dataset.")
+        return
 
     # --- Deduplicate and append ---
-    new_data = pd.concat([phishing, benign], ignore_index=True)
+    new_data = pd.concat(frames, ignore_index=True)
     new_data = new_data[~new_data["url"].str.strip().isin(seen)]
 
     combined = pd.concat([existing, new_data], ignore_index=True)
