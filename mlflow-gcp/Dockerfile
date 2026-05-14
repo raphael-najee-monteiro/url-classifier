@@ -8,4 +8,5 @@ CMD exec mlflow server \
     --backend-store-uri $DATABASE_URL \
     --artifacts-destination $MLFLOW_ARTIFACTS_DESTINATION \
     --serve-artifacts \
-    --allowed-hosts "*"
+    --allowed-hosts "*" \
+    --no-auth
