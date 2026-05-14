@@ -1,0 +1,43 @@
+name: Retrain
+
+on:
+  schedule:
+    - cron: "0 2 * * *"   # daily at 02:00 UTC
+  workflow_dispatch:        # allow manual trigger from GitHub UI
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install \
+            mlflow \
+            "dvc[gs]" \
+            google-cloud-storage \
+            scikit-learn \
+            pandas numpy tldextract joblib pyyaml requests pyarrow
+
+      - name: Authenticate to GCP
+        run: |
+          echo '${{ secrets.GCP_SA_KEY }}' > /tmp/gcp-key.json
+          echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-key.json" >> $GITHUB_ENV
+
+      - name: Pull training data
+        run: dvc pull
+
+      - name: Fetch fresh URLs
+        run: python -c "from pipelines.tasks.fetch import fetch_urls; fetch_urls()"
+
+      - name: Extract features
+        run: python -c "from pipelines.tasks.features import extract_features; extract_features()"
+
+      - name: Train and upload model to GCS
+        run: python -m src.training.train
