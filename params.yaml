@@ -15,15 +15,15 @@ features:
 
 model:
   type: gradient_boosting
-  n_estimators: 50 #200
+  n_estimators: 200
   max_depth: 5
   learning_rate: 0.1
 
 mlflow:
   experiment_name: malicious-url-classifier
   registered_model_name: url-classifier-prod
-  tracking_uri: https://mlflow-gcp-528928377097.europe-west1.run.app
+  tracking_uri: https://mlflow-gcp-528928377097.europe-west6.run.app
 
 quality_gate:
-  min_accuracy: 0.5 #0.90
-  min_f1: 0.5 #0.88
+  min_accuracy: 0.90
+  min_f1: 0.88
