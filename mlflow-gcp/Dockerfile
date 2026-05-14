@@ -2,6 +2,8 @@ FROM ghcr.io/mlflow/mlflow:v3.10.0-full
 
 RUN pip install google-cloud-storage psycopg2-binary
 
+ENV MLFLOW_DISABLE_HOST_HEADER_CHECK=true
+
 CMD exec mlflow server \
     --host 0.0.0.0 \
     --port $PORT \

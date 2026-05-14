@@ -3,6 +3,7 @@
 End-to-end MLOps pipeline for real-time phishing URL detection — from raw data to a live web app, with automated daily retraining.
 
 **Live app:** https://url-classifier.streamlit.app/
+
 **MLflow tracking:** https://mlflow-gcp-528928377097.europe-west6.run.app
 
 ---
