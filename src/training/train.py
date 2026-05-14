@@ -28,7 +28,7 @@ def main() -> None:
         X, y, test_size=params["data"]["test_size"], random_state=params["data"]["random_state"], stratify=y
     )
 
-    # mlflow.set_tracking_uri(params["mlflow"]["tracking_uri"])
+    mlflow.set_tracking_uri(params["mlflow"]["tracking_uri"])
     mlflow.set_experiment(params["mlflow"]["experiment_name"])
     with mlflow.start_run():
         mlflow.log_params(params["model"])
