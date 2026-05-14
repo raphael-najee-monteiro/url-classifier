@@ -58,8 +58,8 @@ def main() -> None:
             joblib.dump(model, buf)
             buf.seek(0)
             gcs = storage.Client()
-            gcs.bucket("pipeline-gang-dvc").blob("models/url_classifier.joblib").upload_from_file(buf)
-            print("Model uploaded to gs://pipeline-gang-dvc/models/url_classifier.joblib")
+            gcs.bucket("url-classifier-mlops").blob("models/url_classifier.joblib").upload_from_file(buf)
+            print("Model uploaded to gs://url-classifier-mlops/models/url_classifier.joblib")
         else:
             print("Quality gate failed — not registered.")
 

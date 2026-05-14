@@ -31,7 +31,7 @@ jobs:
           echo "GOOGLE_APPLICATION_CREDENTIALS=/tmp/gcp-key.json" >> $GITHUB_ENV
 
       - name: Pull training data
-        run: dvc pull data/
+        run: dvc pull data/raw.dvc
 
       - name: Fetch fresh URLs
         run: python -c "from pipelines.tasks.fetch import fetch_urls; fetch_urls()"

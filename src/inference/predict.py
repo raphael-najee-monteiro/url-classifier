@@ -10,7 +10,7 @@ from google.oauth2 import service_account
 from src.features.url_features import extract, FEATURE_COLUMNS
 
 _MODEL = None
-GCS_BUCKET = "pipeline-gang-dvc"
+GCS_BUCKET = "url-classifier-mlops"
 GCS_MODEL_PATH = "models/url_classifier.joblib"
 
 
