@@ -1,0 +1,13 @@
+stages:
+  train:
+    cmd: python -m src.training.train
+    deps:
+      - src/training/train.py
+      - src/features/url_features.py
+      - src/models/baseline.py
+      - data/raw/urls.csv
+    params:
+      - model
+      - data
+    outs:
+      - mlruns/

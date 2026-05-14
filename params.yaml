@@ -1,0 +1,29 @@
+data:
+  raw_path: data/raw/urls.csv
+  processed_path: data/processed/features.parquet
+  test_size: 0.2
+  random_state: 42
+
+fetch:
+  kaggle_path: data/raw/kaggle.csv
+  phishtank_n: 5000   # fresh phishing URLs to pull per daily run
+  tranco_n: 5000      # fresh benign URLs to pull per daily run
+
+features:
+  use_tld: true
+  use_entropy: true
+
+model:
+  type: gradient_boosting
+  n_estimators: 50 #200
+  max_depth: 5
+  learning_rate: 0.1
+
+mlflow:
+  experiment_name: malicious-url-classifier
+  registered_model_name: url-classifier-prod
+  tracking_uri: https://mlflow-gcp-528928377097.europe-west1.run.app
+
+quality_gate:
+  min_accuracy: 0.5 #0.90
+  min_f1: 0.5 #0.88

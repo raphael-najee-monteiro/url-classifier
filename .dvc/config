@@ -1,0 +1,5 @@
+[core]
+    analytics = false
+    remote = data-bucket
+['remote "data-bucket"']
+    url = gs://pipeline-gang-dvc/data/raw
