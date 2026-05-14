@@ -9,5 +9,4 @@ stages:
     params:
       - model
       - data
-    outs:
-      - mlruns/
+    outs: []
