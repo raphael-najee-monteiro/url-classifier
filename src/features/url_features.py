@@ -34,8 +34,11 @@ def _normalize_url(url: str) -> str:
     """
     if "://" not in url:
         url = f"http://{url}"
-    if urlparse(url).path == "":
-        url += "/"
+    try:
+        if urlparse(url).path == "":
+            url += "/"
+    except ValueError:
+        pass  # malformed URL (e.g. invalid IPv6); extract() will handle it
     return url
 
 
