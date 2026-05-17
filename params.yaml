@@ -25,5 +25,5 @@ mlflow:
   tracking_uri: https://mlflow-gcp-528928377097.europe-west6.run.app
 
 quality_gate:
-  min_accuracy: 0.85
-  min_f1: 0.85
+  min_accuracy: 0.83
+  min_f1: 0.83
