@@ -17,13 +17,35 @@ def _entropy(s: str) -> float:
     return -sum(p * math.log2(p) for p in probs)
 
 
+def _normalize_url(url: str) -> str:
+    """Normalize URL to a canonical form for consistent feature extraction.
+
+    Two transformations are applied:
+    1. Add an ``http://`` scheme when none is present so that urlparse can
+       correctly split the netloc from the path component.
+    2. Ensure the path is at least ``/`` (i.e. treat an empty path the same
+       as the root path).  Without this, bare domains such as ``google.com``
+       produce ``path_length=0`` while the identical URL written as
+       ``google.com/`` produces ``path_length=1``, causing the model to
+       classify them differently.  The training data has the same issue:
+       malicious Kaggle samples are stored as bare domains (path_length=0)
+       while benign samples are stored as full URLs with paths (path_length≥1),
+       so the model conflates "no trailing slash" with "malicious".
+    """
+    if "://" not in url:
+        url = f"http://{url}"
+    if urlparse(url).path == "":
+        url += "/"
+    return url
+
+
 def extract(url: str) -> dict:
     """Extract features from a single URL. Returns a dict matching the feature schema."""
-    url = url.strip()
+    url = _normalize_url(url.strip())
     try:
-        parsed = urlparse(url if "://" in url else f"http://{url}")
+        parsed = urlparse(url)
     except ValueError:
-        parsed = urlparse("http://invalid")  # fallback for malformed URLs
+        parsed = urlparse("http://invalid/")  # fallback for malformed URLs
     ext = tldextract.extract(url)
     host = parsed.hostname or ""
     return {
