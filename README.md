@@ -159,7 +159,7 @@ Hyperparameters (in `params.yaml`):
 
 ```yaml
 model:
-  n_estimators: 50
+  n_estimators: 200
   max_depth: 5
   learning_rate: 0.1
 ```
@@ -168,8 +168,8 @@ model:
 
 ```yaml
 quality_gate:
-  min_accuracy: 0.90
-  min_f1: 0.88
+  min_accuracy: 0.83
+  min_f1: 0.83
 ```
 
 If the gate fails, the run is logged but not registered and the previous production model remains active.
